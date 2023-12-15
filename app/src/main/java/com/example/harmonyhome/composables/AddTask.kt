@@ -1,23 +1,22 @@
 package com.example.harmonyhome.composables
 
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,15 +28,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import androidx.constraintlayout.compose.ConstraintLayout
+
+import androidx.constraintlayout.compose.ConstraintLayoutScope.ConstrainedLayoutReferences
+import androidx.constraintlayout.compose.ConstraintLayoutTagParentData
 import com.example.harmonyhome.ui.theme.HarmonyHomeTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AddTask() {
 
@@ -57,6 +61,14 @@ fun AddTask() {
 
     var showDateSelector by remember {
         mutableStateOf(false)
+    }
+
+    var showAssigneeSelector by remember {
+        mutableStateOf(false)
+    }
+
+    var assignee by remember {
+        mutableStateOf("Myself")
     }
 
     Scaffold(topBar = {
@@ -81,7 +93,7 @@ fun AddTask() {
                 .padding(start = 16.dp, end = 16.dp)
         ) {
             OutlinedTextField(
-                label = { Text("Name this task") },
+                label = { Text("What needs to be done?") },
                 shape = inputsShape,
                 modifier = inputsModifier,
                 value = taskName,
@@ -98,32 +110,65 @@ fun AddTask() {
             )
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = inputsModifier) {
-                    Text("Assignee", modifier = Modifier.padding(end = 16.dp))
-                    OutlinedTextField(
-                        modifier = Modifier.height(28.dp).padding(end = 128.dp),
-                        value = "",
-                        onValueChange = {},
-                        shape = inputsShape
-                    )
+                    ConstraintLayout {
+                        val (label, input) = createRefs()
+                        Text("Assignee", modifier = Modifier
+                            .constrainAs(label) { top.linkTo(parent.top) }
+                            .padding(end = 16.dp))
+                        ExposedDropdownMenuBox(
+                            modifier = Modifier
+                            .constrainAs(input){start.linkTo(label.start, margin = 100.dp)},
+                            expanded = showAssigneeSelector,
+                            onExpandedChange = { showAssigneeSelector = it }) {
+                            OutlinedTextField(
+                                modifier = Modifier
+                                    .menuAnchor()
+                                    .height(28.dp)
+                                    .padding(end = 200.dp),
+                                value = assignee,
+                                onValueChange = {},
+                                shape = inputsShape,
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showAssigneeSelector) }
+                            )
+                            ExposedDropdownMenu(
+                                expanded = showAssigneeSelector,
+                                onDismissRequest = { /*TODO*/ }) {
+                                DropdownMenuItem(text = { Text("Myself") }, onClick = {
+                                    assignee = "Myself"
+                                    showAssigneeSelector = false
+                                })
+                                DropdownMenuItem(text = { Text("Someone else") }, onClick = {
+                                    assignee = "Someone else"
+                                    showAssigneeSelector = false
+                                })
+                            }
+                        }
+                    }
+
+
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = inputsModifier) {
-                    Text("Deadline", modifier = Modifier.padding(end = 16.dp))
-                    Box(
-                        Modifier
-                            .height(28.dp)
-                            .fillMaxWidth()
-                            .padding(end = 128.dp)
-                            .border(width = Dp.Hairline, color = Color.Black, shape = inputsShape)
-                            .clickable {
-                                showDateSelector = !showDateSelector
-                            })
-                }
+                  ConstraintLayout {
+                   val (label, input) = createRefs()
+                      Text("Deadline", modifier = Modifier.constrainAs(label){top.linkTo(parent.top)}.padding(end = 16.dp))
+                      Box(
+                          Modifier
+                              .constrainAs(input){start.linkTo(label.start, margin = 100.dp) }
+                              .height(28.dp)
+                              .fillMaxWidth()
+                              .padding(end = 200.dp)
+                              .border(width = Dp.Hairline, color = Color.Black, shape = inputsShape)
+                              .clickable {
+                                  showDateSelector = !showDateSelector
+                              })
+                  }
+                  }
+
             }
             TagsList(modifier = inputsModifier)
         }
     }
 }
-
 
 
 @Preview(showBackground = true)
