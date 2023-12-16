@@ -153,9 +153,10 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                                 ) {
                                     Text(
                                         viewModel.assignee,
-                                        modifier = Modifier.padding(start = 12.dp)
+                                        modifier = Modifier.padding(start = 12.dp, top = 2.dp)
                                     )
                                     Icon(
+                                        modifier = Modifier.padding(top = 4.dp, end = 4.dp),
                                         imageVector = Icons.Outlined.ArrowDropDown,
                                         contentDescription = "Icon"
                                     )
@@ -180,7 +181,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
 
 
                 }
-                Row(verticalAlignment = Alignment.CenterVertically, modifier = inputsModifier) {
+                Row(verticalAlignment = Alignment.Bottom, modifier = inputsModifier) {
                     ConstraintLayout {
                         val (label, input) = createRefs()
                         Text(
@@ -206,11 +207,12 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                         {
                             Row(
                                 Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
+                                verticalAlignment = Alignment.Bottom,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(viewModel.deadline, modifier = Modifier.padding(start = 12.dp))
+                                Text(viewModel.deadline, modifier = Modifier.padding(start = 12.dp, top = 2.dp))
                                 Icon(
+                                    modifier = Modifier.padding(top = 4.dp, end = 4.dp),
                                     imageVector = Icons.Outlined.ArrowDropDown,
                                     contentDescription = "Icon"
                                 )

@@ -32,8 +32,9 @@ fun TagsList(modifier: Modifier = Modifier) {
     }
 
     if (showAddTagDialog) {
-        AddTagDialog()
+        AddTagDialog(onAdd = { addTag(it) } )
     }
+
 
     Row(modifier = modifier) {
         Text(modifier = Modifier.padding(top = 14.dp, end = 16.dp), text = "Tags")
@@ -59,7 +60,7 @@ fun TagsList(modifier: Modifier = Modifier) {
     }
 }
 
-fun addTag() {
+fun addTag(tag: String) {
 
 }
 
