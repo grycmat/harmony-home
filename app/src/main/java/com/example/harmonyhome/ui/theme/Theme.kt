@@ -17,29 +17,25 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme =  darkColorScheme(
-    primary = Color(0xFF3498db), // Blue Dark Blue
-    secondary = Color(0xFFe74c3c), // Red // Dark Red
-    background = Color(0xFF2c3e50), // Dark Blue
-    surface = Color(0xFF34495e), // Dark Gray
-    onPrimary = Color(0xFFFFFFFF), // White
-    onSecondary = Color(0xFFFFFFFF), // White
-    onBackground = Color(0xFFFFFFFF), // White
-    onSurface = Color(0xFFFFFFFF), // White
-    error = Color(0xFFe74c3c), // Red
-    onError = Color(0xFFFFFFFF) // White
+    primary = Color(0xFFD32F2F), // Darker Red
+    secondary = Color(0xFFEF5350), // Light Red
+    background = Color(0xFF212121), // Dark background
+    surface = Color(0xFF424242), // Dark surface
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onBackground = Color.White,
+    onSurface = Color.White
 )
 
 private val LightColorScheme =  lightColorScheme(
-    primary = Color(0xFF3498db), // Blue/ Dark Blue
-    secondary = Color(0xFFe74c3c), // Red Dark Red
-    background = Color(0xFFecf0f1), // Light Gray
-    surface = Color(0xFFecf0f1), // Light Gray
-    onPrimary = Color(0xFFFFFFFF), // White
-    onSecondary = Color(0xFFFFFFFF), // White
-    onBackground = Color(0xFF2c3e50), // Dark Blue
-    onSurface = Color(0xFF2c3e50), // Dark Blue
-    error = Color(0xFFe74c3c), // Red
-    onError = Color(0xFFFFFFFF) // White
+    primary = Color(0xFFD32F2F),
+    secondary = Color(0xFFEF5350), // Dark Red
+    background = Color.White, // Light background
+    surface = Color(0xFFF5F5F5), // Light surface
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onBackground = Color.Black,
+    onSurface = Color.Black
 )
 
 @Composable

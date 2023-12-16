@@ -24,7 +24,7 @@ import com.example.harmonyhome.ui.theme.HarmonyHomeTheme
 @Composable
 fun TagsList(modifier: Modifier = Modifier) {
     val tagList = remember {
-        mutableStateListOf<String>("tag 1", "tag 2", "tag 3")
+        mutableStateListOf("tag 1", "tag 2", "tag 3")
     }
 
     var showAddTagDialog by remember {
