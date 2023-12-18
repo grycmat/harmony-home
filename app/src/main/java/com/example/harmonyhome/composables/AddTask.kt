@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -22,6 +23,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -68,7 +70,11 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
     val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text("Task") })
+        TopAppBar(title = { Text("Task") }, actions = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Outlined.Check, contentDescription = "Save icon")
+            }
+        })
     }) { paddingVals: PaddingValues ->
         if (showDateSelector) {
             val datePickerState = rememberDatePickerState()
@@ -210,7 +216,10 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                                 verticalAlignment = Alignment.Bottom,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(viewModel.deadline, modifier = Modifier.padding(start = 12.dp, top = 2.dp))
+                                Text(
+                                    viewModel.deadline,
+                                    modifier = Modifier.padding(start = 12.dp, top = 2.dp)
+                                )
                                 Icon(
                                     modifier = Modifier.padding(top = 4.dp, end = 4.dp),
                                     imageVector = Icons.Outlined.ArrowDropDown,
