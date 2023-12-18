@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Button
@@ -72,7 +73,9 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
     val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text("Task") }, actions = {
+        TopAppBar(navigationIcon = { IconButton(onClick = { /*TODO*/ }) {
+            Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back icon")
+        }}, title = { Text("Task") }, actions = {
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Outlined.Check, contentDescription = "Save icon")
             }
