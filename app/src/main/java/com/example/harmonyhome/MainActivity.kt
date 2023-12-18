@@ -5,17 +5,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -29,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.harmonyhome.composables.PreviewView
+import com.example.harmonyhome.composables.TaskView
 import com.example.harmonyhome.ui.theme.HarmonyHomeTheme
 
 class MainActivity : ComponentActivity() {
@@ -54,7 +51,10 @@ fun Dashboard(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = { TopAppBar({ Text("Hello Roommate!") }) },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(
+                onClick = { /*TODO*/ },
+                containerColor = MaterialTheme.colorScheme.primary
+            ) {
                 Icon(imageVector = Icons.Outlined.Add, contentDescription = "Add task")
             }
         },
@@ -69,8 +69,17 @@ fun Dashboard(modifier: Modifier = Modifier) {
 
 @Composable
 fun TodayView() {
-    Column {
+    Column(Modifier.fillMaxWidth().padding(top = 16.dp)) {
         Text("Today", style = MaterialTheme.typography.headlineSmall)
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .border(1.dp, MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
+        ) {
+
+            TaskView()
+        }
     }
 }
 

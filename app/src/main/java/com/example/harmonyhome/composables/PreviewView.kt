@@ -16,13 +16,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.harmonyhome.R
 import com.example.harmonyhome.ui.theme.HarmonyHomeTheme
 
 @Composable
 fun PreviewView(modifier: Modifier = Modifier) {
-    Box(modifier.border(1.dp, MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))) {
+    Box(modifier.border(1.dp, MaterialTheme.colorScheme.surface, RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corners)))) {
         Column(modifier.fillMaxWidth()) {
             PreviewRow(3f, 2f)
             PreviewRow(2f, 3f)
@@ -33,19 +35,20 @@ fun PreviewView(modifier: Modifier = Modifier) {
 
 @Composable
 private fun PreviewRow(leftPillSize: Float, rightPillSize: Float) {
+    val cardHeight = 120.dp
     Row(Modifier.fillMaxWidth()) {
         PreviewCard(
             Modifier
-                .height(120.dp)
-                .padding(8.dp)
+                .height(cardHeight)
+                .padding(dimensionResource(id = R.dimen.padding_small))
                 .weight(leftPillSize),
             title = "4",
             subtitle = "Tasks"
         )
         PreviewCard(
             Modifier
-                .height(120.dp)
-                .padding(8.dp)
+                .height(cardHeight)
+                .padding(dimensionResource(id = R.dimen.padding_small))
                 .weight(rightPillSize),
             title = "2",
             subtitle = "Today"

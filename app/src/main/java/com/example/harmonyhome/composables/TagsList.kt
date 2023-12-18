@@ -16,8 +16,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.harmonyhome.R
 import com.example.harmonyhome.ui.theme.HarmonyHomeTheme
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -37,7 +39,7 @@ fun TagsList(modifier: Modifier = Modifier) {
 
 
     Row(modifier = modifier) {
-        Text(modifier = Modifier.padding(top = 14.dp, end = 16.dp), text = "Tags")
+        Text(modifier = Modifier.padding(top = 14.dp, end = dimensionResource(id = R.dimen.padding_medium)), text = "Tags")
         FlowRow {
             AssistChip(
                 modifier = Modifier.padding(4.dp),

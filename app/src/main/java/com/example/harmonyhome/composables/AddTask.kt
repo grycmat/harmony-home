@@ -39,11 +39,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.harmonyhome.R
 import com.example.harmonyhome.ui.theme.HarmonyHomeTheme
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -55,9 +57,9 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
 
     val inputsModifier = Modifier
         .fillMaxWidth()
-        .padding(16.dp)
+        .padding(dimensionResource(id = R.dimen.padding_medium))
 
-    val inputsShape = RoundedCornerShape(12.dp)
+    val inputsShape = RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corners))
 
     var showDateSelector by remember {
         mutableStateOf(false)
@@ -78,23 +80,19 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
     }) { paddingVals: PaddingValues ->
         if (showDateSelector) {
             val datePickerState = rememberDatePickerState()
-            DatePickerDialog(
-                confirmButton = {
-                    Button(onClick = {
-                        viewModel.deadline(dateFormatter.format(Date(datePickerState.selectedDateMillis!!)))
-                        showDateSelector = false
-
-                    }) {
-                        Text("Confirm", modifier = Modifier.padding(12.dp))
-                    }
-                },
-                onDismissRequest = {
+            DatePickerDialog(confirmButton = {
+                Button(onClick = {
+                    viewModel.deadline(dateFormatter.format(Date(datePickerState.selectedDateMillis!!)))
                     showDateSelector = false
-                },
-                properties = DialogProperties(
-                    dismissOnBackPress = true,
-                    dismissOnClickOutside = true
-                )
+
+                }) {
+                    Text("Confirm", modifier = Modifier.padding(12.dp))
+                }
+            }, onDismissRequest = {
+                showDateSelector = false
+            }, properties = DialogProperties(
+                dismissOnBackPress = true, dismissOnClickOutside = true
+            )
             ) {
                 DatePicker(state = datePickerState)
             }
@@ -103,14 +101,18 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
             Modifier
                 .fillMaxWidth()
                 .padding(paddingVals)
-                .padding(start = 16.dp, end = 16.dp)
+                .padding(
+                    start = dimensionResource(id = R.dimen.padding_medium),
+                    end = dimensionResource(id = R.dimen.padding_medium)
+                )
         ) {
             OutlinedTextField(
                 label = { Text("What needs to be done?") },
                 shape = inputsShape,
                 modifier = inputsModifier,
                 value = viewModel.taskName,
-                onValueChange = { viewModel.taskName(it) }, singleLine = true
+                onValueChange = { viewModel.taskName(it) },
+                singleLine = true
             )
             OutlinedTextField(
                 label = { Text("Description") },
@@ -125,12 +127,16 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = inputsModifier) {
                     ConstraintLayout {
                         val (label, input) = createRefs()
-                        Text("Assignee", modifier = Modifier
-                            .constrainAs(label) { top.linkTo(parent.top) }
-                            .padding(end = 16.dp))
-                        ExposedDropdownMenuBox(
+                        Text("Assignee",
                             modifier = Modifier
-                                .constrainAs(input) { start.linkTo(label.start, margin = 100.dp) },
+                                .constrainAs(label) { top.linkTo(parent.top) }
+                                .padding(end = dimensionResource(id = R.dimen.padding_medium)))
+                        ExposedDropdownMenuBox(modifier = Modifier.constrainAs(input) {
+                                start.linkTo(
+                                    label.start,
+                                    margin = 100.dp
+                                )
+                            },
                             expanded = showAssigneeSelector,
                             onExpandedChange = { showAssigneeSelector = it }) {
                             Box(
@@ -138,8 +144,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                                     .menuAnchor()
                                     .constrainAs(input) {
                                         start.linkTo(
-                                            label.start,
-                                            margin = 100.dp
+                                            label.start, margin = 100.dp
                                         )
                                     }
                                     .height(30.dp)
@@ -148,10 +153,8 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                                     .border(
                                         width = 1.dp,
                                         color = Color.Gray,
-                                        shape = RoundedCornerShape(11.dp)
-                                    )
-                            )
-                            {
+                                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corners))
+                                    )) {
                                 Row(
                                     Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically,
@@ -168,8 +171,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                                     )
                                 }
                             }
-                            ExposedDropdownMenu(
-                                expanded = showAssigneeSelector,
+                            ExposedDropdownMenu(expanded = showAssigneeSelector,
                                 onDismissRequest = { }) {
                                 DropdownMenuItem(interactionSource = remember {
                                     MutableInteractionSource()
@@ -190,27 +192,28 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                 Row(verticalAlignment = Alignment.Bottom, modifier = inputsModifier) {
                     ConstraintLayout {
                         val (label, input) = createRefs()
-                        Text(
-                            "Deadline",
+                        Text("Deadline",
                             modifier = Modifier
                                 .constrainAs(label) { top.linkTo(parent.top) }
-                                .padding(end = 16.dp)
-                        )
+                                .padding(end = dimensionResource(id = R.dimen.padding_medium)))
                         Box(
                             Modifier
-                                .constrainAs(input) { start.linkTo(label.start, margin = 100.dp) }
+                                .constrainAs(input) {
+                                    start.linkTo(
+                                        label.start, margin = 100.dp
+                                    )
+                                }
                                 .height(30.dp)
                                 .fillMaxWidth()
                                 .padding(end = 200.dp)
                                 .border(
                                     width = 1.dp,
                                     color = Color.Gray,
-                                    shape = RoundedCornerShape(11.dp)
+                                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corners))
                                 )
                                 .clickable {
                                     showDateSelector = !showDateSelector
-                                })
-                        {
+                                }) {
                             Row(
                                 Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.Bottom,
