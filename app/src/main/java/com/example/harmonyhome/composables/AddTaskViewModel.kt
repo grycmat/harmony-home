@@ -3,6 +3,7 @@ package com.example.harmonyhome.composables
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.harmonyhome.room.Task
 
 class AddTaskViewModel : ViewModel() {
     private val _deadline = mutableStateOf("")
@@ -30,5 +31,14 @@ class AddTaskViewModel : ViewModel() {
     val assignee: String by _assignee
     fun assignee(nextAssignee: String) {
         _assignee.value = nextAssignee
+    }
+
+    fun createTask(): Task {
+        return Task(
+            name = taskName,
+            description = taskDesc,
+            assignee = assignee,
+            deadline = deadline
+        )
     }
 }

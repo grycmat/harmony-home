@@ -35,11 +35,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,14 +48,25 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.harmonyhome.R
+import com.example.harmonyhome.room.HarmonyHomeDb
+import com.example.harmonyhome.room.Task
 import com.example.harmonyhome.ui.theme.HarmonyHomeTheme
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
+fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
+
+    val db = HarmonyHomeDb.getDatabase(LocalContext.current);
+    val taskDao = db.taskDao()
+    val coroutineScope = rememberCoroutineScope()
+
+    suspend fun saveTask(task: Task) {
+        taskDao.insert(task)
+    }
 
     val inputsModifier = Modifier
         .fillMaxWidth()
@@ -73,10 +85,19 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
     val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     Scaffold(topBar = {
-        TopAppBar(navigationIcon = { IconButton(onClick = { /*TODO*/ }) {
-            Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back icon")
-        }}, title = { Text("Task") }, actions = {
+        TopAppBar(navigationIcon = {
             IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back icon")
+            }
+        }, title = { Text("Task") }, actions = {
+            IconButton(onClick = {
+                coroutineScope.launch {
+                    val task = viewModel.createTask()
+                    saveTask(task)
+                }.invokeOnCompletion {
+                    onTaskSave()
+                }
+            }) {
                 Icon(imageVector = Icons.Outlined.Check, contentDescription = "Save icon")
             }
         })
@@ -85,7 +106,13 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
             val datePickerState = rememberDatePickerState()
             DatePickerDialog(confirmButton = {
                 Button(onClick = {
-                    viewModel.deadline(dateFormatter.format(Date(datePickerState.selectedDateMillis!!)))
+                    viewModel.deadline(
+                        dateFormatter.format(
+                            Date(
+                                datePickerState.selectedDateMillis!!
+                            )
+                        )
+                    )
                     showDateSelector = false
 
                 }) {
@@ -135,11 +162,10 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                                 .constrainAs(label) { top.linkTo(parent.top) }
                                 .padding(end = dimensionResource(id = R.dimen.padding_medium)))
                         ExposedDropdownMenuBox(modifier = Modifier.constrainAs(input) {
-                                start.linkTo(
-                                    label.start,
-                                    margin = 100.dp
-                                )
-                            },
+                            start.linkTo(
+                                label.start, margin = 100.dp
+                            )
+                        },
                             expanded = showAssigneeSelector,
                             onExpandedChange = { showAssigneeSelector = it }) {
                             Box(
@@ -174,7 +200,8 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
                                     )
                                 }
                             }
-                            ExposedDropdownMenu(expanded = showAssigneeSelector,
+                            ExposedDropdownMenu(
+                                expanded = showAssigneeSelector,
                                 onDismissRequest = { }) {
                                 DropdownMenuItem(interactionSource = remember {
                                     MutableInteractionSource()
@@ -248,7 +275,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel()) {
 @Composable
 fun AddTaskPreview() {
     HarmonyHomeTheme {
-        AddTask()
+        AddTask(onTaskSave = {})
     }
 
 }

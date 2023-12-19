@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.example.harmonyhome.composables.AddTask
 import com.example.harmonyhome.composables.PreviewView
 import com.example.harmonyhome.composables.TaskView
+import com.example.harmonyhome.room.Task
 import com.example.harmonyhome.ui.theme.HarmonyHomeTheme
 
 class MainActivity : ComponentActivity() {
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
                     AnimatedContent(targetState = screen, label = "") {
                         when(it) {
                             0 -> Dashboard(floatingButtonClicked = { screen = 1 })
-                            1 -> AddTask()
+                            1 -> AddTask(onTaskSave = {screen = 0})
                             else -> Text("Else")
                         }
                     }
@@ -65,6 +66,10 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+fun onTaskSave(task: Task) {
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
