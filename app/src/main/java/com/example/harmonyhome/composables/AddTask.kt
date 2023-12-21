@@ -28,6 +28,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
@@ -63,6 +65,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
     val db = HarmonyHomeDb.getDatabase(LocalContext.current);
     val taskDao = db.taskDao()
     val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     suspend fun saveTask(task: Task) {
         taskDao.insert(task)
@@ -94,6 +97,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
                 coroutineScope.launch {
                     val task = viewModel.createTask()
                     saveTask(task)
+                    snackbarHostState.showSnackbar("Task saved")
                 }.invokeOnCompletion {
                     onTaskSave()
                 }
@@ -101,7 +105,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
                 Icon(imageVector = Icons.Outlined.Check, contentDescription = "Save icon")
             }
         })
-    }) { paddingVals: PaddingValues ->
+    }, snackbarHost = { SnackbarHost(snackbarHostState) }) { paddingVals: PaddingValues ->
         if (showDateSelector) {
             val datePickerState = rememberDatePickerState()
             DatePickerDialog(confirmButton = {
@@ -200,8 +204,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
                                     )
                                 }
                             }
-                            ExposedDropdownMenu(
-                                expanded = showAssigneeSelector,
+                            ExposedDropdownMenu(expanded = showAssigneeSelector,
                                 onDismissRequest = { }) {
                                 DropdownMenuItem(interactionSource = remember {
                                     MutableInteractionSource()

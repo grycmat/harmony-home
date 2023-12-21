@@ -17,13 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.harmonyhome.R
-import com.example.harmonyhome.ui.theme.HarmonyHomeTheme
+import com.example.harmonyhome.room.Task
 
 @Composable
-fun TaskView() {
+fun TaskView(task: Task) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -34,34 +33,37 @@ fun TaskView() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AssistChip(onClick = { /*TODO*/ }, label = { Text("Create") })
+            AssistChip(onClick = { /*TODO*/ }, label = { Text(task.assignee) })
             Row {
                 Icon(
                     modifier = Modifier.padding(end = dimensionResource(id = R.dimen.padding_small)),
                     imageVector = Icons.Outlined.DateRange,
                     contentDescription = "Type"
                 )
-                Text(text = "Calendar")
+                Text(text = task.deadline)
             }
         }
-        Row(Modifier.fillMaxWidth().padding(top = dimensionResource(id = R.dimen.padding_small))) {
-            Text(text = "Task Name", style = MaterialTheme.typography.headlineMedium)
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = dimensionResource(id = R.dimen.padding_small))
+        ) {
+            Text(text = task.name, style = MaterialTheme.typography.headlineMedium)
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = "Subtitle", style = MaterialTheme.typography.bodyLarge)
+            Text(text = task.description, style = MaterialTheme.typography.bodyLarge)
             Icon(imageVector = Icons.Outlined.Notifications, contentDescription = "Notifications")
         }
         Divider(
-            Modifier.padding(top = dimensionResource(id = R.dimen.padding_small)),
-            thickness = 1.dp
+            Modifier.padding(top = dimensionResource(id = R.dimen.padding_small)), thickness = 1.dp
         )
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TaskViewPreview() {
-    HarmonyHomeTheme {
-        TaskView()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TaskViewPreview() {
+//    HarmonyHomeTheme {
+//        TaskView()
+//    }
+//}
