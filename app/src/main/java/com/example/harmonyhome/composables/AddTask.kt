@@ -60,7 +60,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
+fun AddTask(viewModel: AddTaskViewModel = viewModel(), onGoBack: () -> Unit) {
 
     val db = HarmonyHomeDb.getDatabase(LocalContext.current);
     val taskDao = db.taskDao()
@@ -89,7 +89,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
 
     Scaffold(topBar = {
         TopAppBar(navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { onGoBack() }) {
                 Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back icon")
             }
         }, title = { Text("Task") }, actions = {
@@ -97,9 +97,9 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
                 coroutineScope.launch {
                     val task = viewModel.createTask()
                     saveTask(task)
-                    snackbarHostState.showSnackbar("Task saved")
+
                 }.invokeOnCompletion {
-                    onTaskSave()
+                    onGoBack()
                 }
             }) {
                 Icon(imageVector = Icons.Outlined.Check, contentDescription = "Save icon")
@@ -204,7 +204,8 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
                                     )
                                 }
                             }
-                            ExposedDropdownMenu(expanded = showAssigneeSelector,
+                            ExposedDropdownMenu(
+                                expanded = showAssigneeSelector,
                                 onDismissRequest = { }) {
                                 DropdownMenuItem(interactionSource = remember {
                                     MutableInteractionSource()
@@ -278,7 +279,7 @@ fun AddTask(viewModel: AddTaskViewModel = viewModel(), onTaskSave: () -> Unit) {
 @Composable
 fun AddTaskPreview() {
     HarmonyHomeTheme {
-        AddTask(onTaskSave = {})
+        AddTask(onGoBack = {})
     }
 
 }
